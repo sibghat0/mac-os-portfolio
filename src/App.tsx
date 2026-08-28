@@ -9,13 +9,15 @@ function App() {
   const [currentWindow, setCurrentWindow] = useState(
     CURRENT_WINDOW_TYPE.LOCKSCREEN,
   );
+
   const isLockScreen = currentWindow === CURRENT_WINDOW_TYPE.LOCKSCREEN;
 
   return (
-    <div className="h-full w-full flex flex-col justify-between">
+    <div className="min-h-screen w-full flex flex-col">
       <Header />
-      <main>
-        {currentWindow === CURRENT_WINDOW_TYPE.LOCKSCREEN ? (
+
+      <main className="flex-1">
+        {isLockScreen ? (
           <LockScreen
             currentWindow={currentWindow}
             setCurrentWindow={setCurrentWindow}

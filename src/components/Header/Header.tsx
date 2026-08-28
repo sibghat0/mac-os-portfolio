@@ -17,7 +17,7 @@ export default function Header() {
   const formattedDate = moment().format("ddd D MMM h:mm A");
 
   return (
-    <div className="absolute z-50 w-full h-fit flex justify-between px-4 py-1">
+    <div className="absolute z-50 w-full h-fit flex justify-between px-4 py-2">
       <div className="relative flex text-white opacity-100">
         <AppleLogoIcon />
       </div>
