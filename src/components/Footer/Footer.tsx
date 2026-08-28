@@ -51,7 +51,15 @@ interface DockItemProps {
 
 function DockItem({ app, mouseX, onImageReady }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const { appOpen, setAppOpen } = useDocker();
+  const {
+    appOpen,
+    setAppOpen,
+    appMinimized,
+    setAppMinimized,
+    isAppsPopoverOpen,
+    setIsAppsPopoverOpen,
+    setActiveApp,
+  } = useDocker();
   const [isHovered, setIsHovered] = useState(false);
 
   const sizeTransform = useTransform(mouseX, (val) => {
@@ -70,6 +78,27 @@ function DockItem({ app, mouseX, onImageReady }: DockItemProps) {
     damping: 30,
   });
 
+  const handleAppClick = () => {
+    if (app.uniqueId === "launchpad") {
+      setIsAppsPopoverOpen(!isAppsPopoverOpen);
+      return;
+    }
+
+    if (isAppsPopoverOpen) {
+      setIsAppsPopoverOpen(false);
+    }
+
+    setActiveApp(app.uniqueId);
+
+    if (!appOpen.includes(app.uniqueId)) {
+      setAppOpen([...appOpen, app.uniqueId]);
+    }
+
+    if (appMinimized.includes(app.uniqueId)) {
+      setAppMinimized(appMinimized.filter((id) => id !== app.uniqueId));
+    }
+  };
+
   return (
     <motion.div
       ref={ref}
@@ -86,11 +115,7 @@ function DockItem({ app, mouseX, onImageReady }: DockItemProps) {
 
       <div
         className="flex cursor-pointer select-none items-center justify-center w-full h-full"
-        onClick={() => {
-          if (!appOpen.includes(app.uniqueId)) {
-            setAppOpen([...appOpen, app.uniqueId]);
-          }
-        }}
+        onClick={handleAppClick}
       >
         <img
           src={app.icon}
@@ -112,9 +137,11 @@ function DockItem({ app, mouseX, onImageReady }: DockItemProps) {
 export default function Footer() {
   const mouseX = useMotionValue(Infinity);
   const [loadedImages, setLoadedImages] = useState(0);
+  const { appMaximized } = useDocker();
 
   const totalImages = apps.length + systemApps.length;
   const isLoaded = loadedImages >= totalImages;
+  const isAnyMaximized = appMaximized.length > 0;
 
   const handleImageReady = () => {
     setLoadedImages((prev) => prev + 1);
@@ -123,7 +150,9 @@ export default function Footer() {
   return (
     <footer
       className={`fixed left-0 right-0 bottom-4 z-50 flex justify-center px-4 transition-opacity duration-700 ease-in-out ${
-        isLoaded ? "opacity-100" : "opacity-0 pointer-events-none"
+        isLoaded && !isAnyMaximized
+          ? "opacity-100"
+          : "opacity-0 pointer-events-none"
       }`}
     >
       <div

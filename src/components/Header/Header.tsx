@@ -5,8 +5,8 @@ import WifiIcon from "../../assets/images/wifi.png";
 import BatteryIcon from "../../assets/images/battery.png";
 import ChargingBatteryIcon from "../../assets/images/charging-battery.png";
 import { useBattery } from "../../utils/useBattery";
-import { AppleLogoIcon } from "../../utils/Icons";
 import ControlCenterDropdown from "../ControlCenterDropdown/ControlCenterDropdown";
+import ApplePopover from "../ApplePopover/ApplePopover";
 
 export default function Header() {
   const { level, charging } = useBattery();
@@ -19,7 +19,7 @@ export default function Header() {
   return (
     <div className="absolute z-50 w-full h-fit flex justify-between px-4 py-2">
       <div className="relative flex text-white opacity-100">
-        <AppleLogoIcon />
+        <ApplePopover />
       </div>
       <div className="relative z-10 flex gap-4 justify-end h-fit items-center text-white">
         <div className="flex gap-1">
