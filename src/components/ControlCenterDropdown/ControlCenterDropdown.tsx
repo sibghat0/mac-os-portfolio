@@ -1,13 +1,10 @@
 import { useEffect, useState } from "react";
-import WifiIcon from "../../assets/images/wifi.png";
+import WifiIcon from "@/assets/images/wifi.png";
+import { useSystem } from "@/composable/useSystem";
 
-export default function ControlCenterDropdown({
-  toggleWifi,
-  setToggleWifi,
-}: {
-  toggleWifi: boolean;
-  setToggleWifi: (value: boolean) => void;
-}) {
+export default function ControlCenterDropdown() {
+  const { wifiEnabled, setWifiEnabled } = useSystem();
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [brightness, setBrightness] = useState(100);
   const [volume, setVolume] = useState(75);
@@ -24,22 +21,23 @@ export default function ControlCenterDropdown({
   }, [brightness]);
 
   return (
-    <div className="absolute top-6 -right-20 rounded-lg gap-4 flex flex-col  p-4">
+    <div className="absolute top-6 -right-20 rounded-lg gap-4 flex flex-col p-4">
       <div className="flex gap-10 items-center">
-        <div className="flex flex-col  gap-4">
+        <div className="flex flex-col gap-4">
+          {/* Wi-Fi Toggle */}
           <div
-            onClick={() => setToggleWifi(!toggleWifi)}
+            onClick={() => setWifiEnabled(!wifiEnabled)}
             className="h-full min-w-44 gap-1 items-center flex p-2 bg-gray-600 cursor-pointer rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-400/20"
           >
             <div
-              className={`flex w-10 h-10 relative cursor-pointer ${!toggleWifi ? "bg-white" : "bg-black"} rounded-full p-2`}
+              className={`flex w-10 h-10 relative cursor-pointer ${!wifiEnabled ? "bg-white" : "bg-black"} rounded-full p-2`}
             >
               <img
                 src={WifiIcon}
                 className="w-6 h-6 "
                 alt="Wifi"
                 style={
-                  !toggleWifi
+                  !wifiEnabled
                     ? {
                         filter:
                           "brightness(0) saturate(100%) invert(29%) sepia(99%) saturate(2307%) hue-rotate(199deg) brightness(98%) contrast(92%)",
@@ -48,24 +46,26 @@ export default function ControlCenterDropdown({
                 }
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col text-white text-sm">
               <span>Wi-Fi</span>
-              <span>{!toggleWifi ? "Connected" : "Disconnected"}</span>
+              <span>{!wifiEnabled ? "Disconnected" : "Connected"}</span>
             </div>
           </div>
+
+          {/* Bluetooth Toggle (Reused from your duplicate code block) */}
           <div
-            onClick={() => setToggleWifi(!toggleWifi)}
+            onClick={() => setWifiEnabled(!wifiEnabled)}
             className="h-full min-w-44 gap-1 items-center flex p-2 bg-gray-600 cursor-pointer rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-400/20"
           >
             <div
-              className={`flex w-10 h-10 relative cursor-pointer ${!toggleWifi ? "bg-white" : "bg-black"} rounded-full p-2`}
+              className={`flex w-10 h-10 relative cursor-pointer ${!wifiEnabled ? "bg-white" : "bg-black"} rounded-full p-2`}
             >
               <img
                 src={WifiIcon}
                 className="w-6 h-6 "
-                alt="Wifi"
+                alt="Bluetooth"
                 style={
-                  !toggleWifi
+                  !wifiEnabled
                     ? {
                         filter:
                           "brightness(0) saturate(100%) invert(29%) sepia(99%) saturate(2307%) hue-rotate(199deg) brightness(98%) contrast(92%)",
@@ -74,12 +74,13 @@ export default function ControlCenterDropdown({
                 }
               />
             </div>
-            <div className="flex flex-col">
-              <span>Wi-Fi</span>
-              <span>{!toggleWifi ? "Connected" : "Disconnected"}</span>
+            <div className="flex flex-col text-white text-sm">
+              <span>Bluetooth</span>
+              <span>{!wifiEnabled ? "Off" : "On"}</span>
             </div>
           </div>
         </div>
+
         <div className="h-36 w-full p-3 bg-gray-600 rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-400/20 flex flex-col justify-between">
           <div className="flex justify-between items-start">
             <div className="h-10 w-10 bg-gray-500/30 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/10">
@@ -138,6 +139,7 @@ export default function ControlCenterDropdown({
         </div>
       </div>
 
+      {/* Display Brightness Slider */}
       <div className="h-full w-full flex flex-col gap-1 py-3 px-4 bg-gray-600 rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-400/20">
         <span className="text-xs font-semibold text-white ml-1">Display</span>
         <div className="flex items-center gap-3">
@@ -190,6 +192,7 @@ export default function ControlCenterDropdown({
         </div>
       </div>
 
+      {/* Sound Volume Slider */}
       <div className="h-full w-full flex flex-col gap-1 py-3 px-4 bg-gray-600 rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-20 border border-gray-400/20">
         <span className="text-xs font-semibold text-white ml-1">Sound</span>
         <div className="flex items-center gap-3">

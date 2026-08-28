@@ -5,39 +5,30 @@ const dockerStore = new Store({
   appOpen: [] as string[],
   appMinimized: [] as string[],
   appMaximized: [] as string[],
-  isAppsPopoverOpen: false,
   activeApp: "" as string,
+  isAppsPopoverOpen: false,
 });
 
 export const useDocker = () => {
   const appOpen = useSelector(dockerStore, (state) => state.appOpen);
   const appMinimized = useSelector(dockerStore, (state) => state.appMinimized);
   const appMaximized = useSelector(dockerStore, (state) => state.appMaximized);
+  const activeApp = useSelector(dockerStore, (state) => state.activeApp);
   const isAppsPopoverOpen = useSelector(
     dockerStore,
     (state) => state.isAppsPopoverOpen,
   );
-  const activeApp = useSelector(dockerStore, (state) => state.activeApp);
 
-  const setAppOpen = (newApps: string[]) => {
-    dockerStore.setState((state) => ({ ...state, appOpen: newApps }));
-  };
-
-  const setAppMinimized = (newMinimized: string[]) => {
-    dockerStore.setState((state) => ({ ...state, appMinimized: newMinimized }));
-  };
-
-  const setAppMaximized = (newMaximized: string[]) => {
-    dockerStore.setState((state) => ({ ...state, appMaximized: newMaximized }));
-  };
-
-  const setIsAppsPopoverOpen = (isOpen: boolean) => {
-    dockerStore.setState((state) => ({ ...state, isAppsPopoverOpen: isOpen }));
-  };
-
-  const setActiveApp = (appId: string) => {
-    dockerStore.setState((state) => ({ ...state, activeApp: appId }));
-  };
+  const setAppOpen = (apps: string[]) =>
+    dockerStore.setState((s) => ({ ...s, appOpen: apps }));
+  const setAppMinimized = (apps: string[]) =>
+    dockerStore.setState((s) => ({ ...s, appMinimized: apps }));
+  const setAppMaximized = (apps: string[]) =>
+    dockerStore.setState((s) => ({ ...s, appMaximized: apps }));
+  const setActiveApp = (appId: string) =>
+    dockerStore.setState((s) => ({ ...s, activeApp: appId }));
+  const setIsAppsPopoverOpen = (isOpen: boolean) =>
+    dockerStore.setState((s) => ({ ...s, isAppsPopoverOpen: isOpen }));
 
   return {
     appOpen,
@@ -46,9 +37,9 @@ export const useDocker = () => {
     setAppMinimized,
     appMaximized,
     setAppMaximized,
-    isAppsPopoverOpen,
-    setIsAppsPopoverOpen,
     activeApp,
     setActiveApp,
+    isAppsPopoverOpen,
+    setIsAppsPopoverOpen,
   };
 };

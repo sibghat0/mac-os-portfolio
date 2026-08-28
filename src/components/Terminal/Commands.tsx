@@ -3,13 +3,12 @@ import React from "react";
 
 const createAppCommand = (
   command: string,
-  appId: string,
   appName: string,
 ): TerminalCommand => ({
   command,
   description: `Open ${appName}`,
   execute: ({ appOpen, setAppOpen }: CommandContext): React.ReactNode => {
-    if (!appOpen.includes(appId)) setAppOpen([...appOpen, appId]);
+    if (!appOpen.includes(command)) setAppOpen([...appOpen, command]);
     return `Opening ${appName}...`;
   },
 });
@@ -35,11 +34,12 @@ export const TERMINAL_COMMANDS: TerminalCommand[] = [
     ),
   },
 
-  createAppCommand("safari", "safari", "Safari"),
-  createAppCommand("finder", "finder", "Finder"),
-  createAppCommand("maps", "maps", "Maps"),
-  createAppCommand("email", "email", "Mail"),
-  createAppCommand("settings", "settings", "System Settings"),
+  createAppCommand("safari", "Safari"),
+  createAppCommand("finder", "Finder"),
+  createAppCommand("maps", "Maps"),
+  createAppCommand("email", "Mail"),
+  createAppCommand("settings", "System Settings"),
+  createAppCommand("notes", "Notes"),
 
   {
     command: "code .",

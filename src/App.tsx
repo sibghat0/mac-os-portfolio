@@ -4,11 +4,14 @@ import { useState } from "react";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import { CURRENT_WINDOW_TYPE } from "./types/home.type";
+import { useBattery } from "@/utils/useBattery";
 
 function App() {
   const [currentWindow, setCurrentWindow] = useState(
     CURRENT_WINDOW_TYPE.LOCKSCREEN,
   );
+
+  useBattery();
 
   const isLockScreen = currentWindow === CURRENT_WINDOW_TYPE.LOCKSCREEN;
 

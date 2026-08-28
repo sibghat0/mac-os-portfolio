@@ -4,14 +4,13 @@ import ControlCenterIcon from "../../assets/images/control-center-icon.webp";
 import WifiIcon from "../../assets/images/wifi.png";
 import BatteryIcon from "../../assets/images/battery.png";
 import ChargingBatteryIcon from "../../assets/images/charging-battery.png";
-import { useBattery } from "../../utils/useBattery";
 import ControlCenterDropdown from "../ControlCenterDropdown/ControlCenterDropdown";
 import ApplePopover from "../ApplePopover/ApplePopover";
+import { useSystem } from "../../composable/useSystem";
 
 export default function Header() {
-  const { level, charging } = useBattery();
-
-  const [toggleWifi, setToggleWifi] = useState(false);
+  // Pull states directly from the global system store
+  const { batteryLevel, isCharging, wifiEnabled, setWifiEnabled } = useSystem();
   const [toggleControlCenter, setToggleControlCenter] = useState(false);
 
   const formattedDate = moment().format("ddd D MMM h:mm A");
@@ -24,20 +23,20 @@ export default function Header() {
       <div className="relative z-10 flex gap-4 justify-end h-fit items-center text-white">
         <div className="flex gap-1">
           <span className="text-xs items-center flex font-medium">
-            {level}%
+            {batteryLevel}%
           </span>
           <img
-            src={charging ? ChargingBatteryIcon : BatteryIcon}
+            src={isCharging ? ChargingBatteryIcon : BatteryIcon}
             className="w-6 h-6"
           />
         </div>
 
         <div
           className="flex relative cursor-pointer"
-          onClick={() => setToggleWifi(!toggleWifi)}
+          onClick={() => setWifiEnabled(!wifiEnabled)}
         >
           <img src={WifiIcon} className="w-5 h-5" />
-          {toggleWifi && (
+          {!wifiEnabled && (
             <div className="h-5 w-0.5 absolute left-[10px] -rotate-45 bg-white" />
           )}
         </div>
@@ -47,12 +46,7 @@ export default function Header() {
             className="w-4 h-4 invert cursor-pointer"
             onClick={() => setToggleControlCenter(!toggleControlCenter)}
           />
-          {toggleControlCenter && (
-            <ControlCenterDropdown
-              toggleWifi={toggleWifi}
-              setToggleWifi={setToggleWifi}
-            />
-          )}
+          {toggleControlCenter && <ControlCenterDropdown />}
         </div>
         <h3 className="text-sm">{formattedDate}</h3>
       </div>
