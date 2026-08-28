@@ -23,7 +23,7 @@ export default function LockScreen({ setCurrentWindow }: any) {
         <div className="bg-white/45 backdrop-blur-sm rounded-full w-12 h-12 flex justify-center">
           <span className="self-center font-bold text-xl text-white">S</span>
         </div>
-        <span className="self-center text-md font-bold">sibghat khan</span>
+        <span className="self-center text-md font-bold">Sibghatullah khan</span>
         <span className="self-center text-xs font-bold opacity-75">
           Touch ID or Enter Password
         </span>
