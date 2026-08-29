@@ -75,7 +75,7 @@ export default function WindowWrapper({
             x: isMaximized ? 0 : undefined,
             width: isMaximized ? "100vw" : defaultWidth,
             height: isMaximized ? "calc(100vh - 32px)" : defaultHeight,
-            top: isMaximized ? "32px" : "10vh",
+            top: isMaximized ? "32px" : "0vh",
             left: isMaximized ? 0 : "15vw",
             borderRadius: isMaximized ? "0px" : "12px",
           }}
