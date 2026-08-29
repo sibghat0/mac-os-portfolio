@@ -75,13 +75,13 @@ export default function WindowWrapper({
             x: isMaximized ? 0 : undefined,
             width: isMaximized ? "100vw" : defaultWidth,
             height: isMaximized ? "calc(100vh - 32px)" : defaultHeight,
-            top: isMaximized ? "32px" : "0vh",
+            top: isMaximized ? "32px" : "5vh",
             left: isMaximized ? 0 : "15vw",
             borderRadius: isMaximized ? "0px" : "12px",
           }}
           exit={{ opacity: 0, scale: 0.95, y: 50 }}
           transition={{ type: "spring", damping: 25, stiffness: 300 }}
-          className={`absolute flex flex-col overflow-hidden border border-white/20 shadow-2xl bg-[#1c1c1e] ${
+          className={`absolute flex flex-col overflow-hidden border cursor-pointer border-white/20 shadow-2xl bg-[#1c1c1e] ${
             isActive
               ? "z-30 shadow-[0_30px_60px_rgba(0,0,0,0.6)]"
               : "z-10 shadow-[0_20px_40px_rgba(0,0,0,0.4)]"

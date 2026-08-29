@@ -3,6 +3,15 @@ import { useSelector } from "@tanstack/react-store";
 import w1 from "@/assets/images/wallpaper/w1.jpg";
 
 const WALLPAPER_STORAGE_KEY = "macos-clone-wallpaper";
+const LOCK_WALLPAPER_STORAGE_KEY = "macos-clone-lock-wallpaper";
+
+const getInitialLockWallpaper = () => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem(LOCK_WALLPAPER_STORAGE_KEY);
+    if (saved) return saved;
+  }
+  return w1;
+};
 
 const getInitialWallpaper = () => {
   if (typeof window !== "undefined") {
@@ -17,6 +26,7 @@ export const systemStore = new Store({
   batteryLevel: 88,
   isCharging: false,
   wallpaper: getInitialWallpaper(),
+  lockScreenWallpaper: getInitialLockWallpaper(),
   settingsActiveTab: "wifi",
   settingsGeneralSubView: "main" as "main" | "about",
 });
@@ -33,6 +43,10 @@ export const useSystem = () => {
   const settingsGeneralSubView = useSelector(
     systemStore,
     (state) => state.settingsGeneralSubView,
+  );
+  const lockScreenWallpaper = useSelector(
+    systemStore,
+    (state) => state.lockScreenWallpaper,
   );
 
   const setWifiEnabled = (enabled: boolean) =>
@@ -54,6 +68,11 @@ export const useSystem = () => {
   const setSettingsGeneralSubView = (view: "main" | "about") =>
     systemStore.setState((s) => ({ ...s, settingsGeneralSubView: view }));
 
+  const setLockScreenWallpaper = (bg: string) => {
+    localStorage.setItem(LOCK_WALLPAPER_STORAGE_KEY, bg);
+    systemStore.setState((s) => ({ ...s, lockScreenWallpaper: bg }));
+  };
+
   return {
     wifiEnabled,
     setWifiEnabled,
@@ -67,5 +86,7 @@ export const useSystem = () => {
     setSettingsActiveTab,
     settingsGeneralSubView,
     setSettingsGeneralSubView,
+    lockScreenWallpaper,
+    setLockScreenWallpaper,
   };
 };

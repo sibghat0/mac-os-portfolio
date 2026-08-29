@@ -20,6 +20,8 @@ import w4 from "@/assets/images/wallpaper/w4.png";
 import w5 from "@/assets/images/wallpaper/w5.jpg";
 import w6 from "@/assets/images/wallpaper/w6.jpg";
 import w7 from "@/assets/images/wallpaper/w7.jpg";
+import w8 from "@/assets/images/lockScreen/Itachi.jpg";
+import w9 from "@/assets/images/lockScreen/Late.jpg";
 
 const MENU_ITEMS = [
   { id: "wifi", label: "Wi-Fi", icon: Wifi, color: "bg-blue-500" },
@@ -38,6 +40,7 @@ const MENU_ITEMS = [
     icon: WallpaperIcon,
     color: "bg-cyan-500",
   },
+  { id: "lockScreen", label: "Lock Screen", icon: Lock, color: "bg-gray-500" },
 ];
 
 const WALLPAPERS = [
@@ -76,12 +79,24 @@ const WALLPAPERS = [
     name: "Monterey SVG",
     url: w7,
   },
+  {
+    id: "itachi",
+    name: "Itachi",
+    url: w8,
+  },
+  {
+    id: "late",
+    name: "Late",
+    url: w9,
+  },
 ];
 
 export default function Settings() {
   const {
     wallpaper,
     setWallpaper,
+    lockScreenWallpaper,
+    setLockScreenWallpaper,
     wifiEnabled,
     setWifiEnabled,
     batteryLevel,
@@ -265,6 +280,42 @@ export default function Settings() {
                     />
 
                     {wallpaper === wp.url && (
+                      <div className="absolute bottom-1 right-1 bg-blue-500 rounded-full p-0.5 shadow-md">
+                        <Check size={12} className="text-white" />
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-xs text-center text-gray-300">
+                    {wp.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      case "lockScreen":
+        return (
+          <div className="max-w-3xl mx-auto space-y-6">
+            <h2 className="text-xl font-medium text-gray-200 mb-4">
+              Lock Screen Picture
+            </h2>
+            <div className="grid grid-cols-4 gap-4">
+              {WALLPAPERS.map((wp) => (
+                <div key={wp.id} className="flex flex-col gap-2">
+                  <div
+                    onClick={() => setLockScreenWallpaper(wp.url)}
+                    className={`aspect-video rounded-lg overflow-hidden cursor-pointer relative border-2 transition-all ${
+                      lockScreenWallpaper === wp.url
+                        ? "border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                        : "border-transparent hover:border-white/30"
+                    }`}
+                  >
+                    <img
+                      src={wp.url}
+                      alt={wp.name}
+                      className="w-full h-full object-cover"
+                    />
+                    {lockScreenWallpaper === wp.url && (
                       <div className="absolute bottom-1 right-1 bg-blue-500 rounded-full p-0.5 shadow-md">
                         <Check size={12} className="text-white" />
                       </div>
