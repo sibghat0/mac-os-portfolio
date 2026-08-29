@@ -6,23 +6,29 @@ import {
   Play,
   Power,
   Lock,
-  User,
   type LucideIcon,
 } from "lucide-react";
 import { AppleLogoIcon } from "@/utils/Icons";
+import { CURRENT_WINDOW_TYPE } from "@/types/home.type";
+import { useWindow } from "@/composable/useWindow";
+import { useDocker } from "@/composable/useDocker";
+import { useSystem } from "@/composable/useSystem";
 
 interface MenuItem {
   label: string;
   icon: LucideIcon;
   badge?: string;
   shortcut?: string;
-  rotateIcon?: boolean;
   rightIcon?: LucideIcon;
+  onClick?: () => void;
 }
 
 export default function ApplePopover() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const { currentWindow, setCurrentWindow } = useWindow();
+  const { appOpen, setAppOpen, setActiveApp } = useDocker();
+  const { setSettingsActiveTab, setSettingsGeneralSubView } = useSystem();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -36,24 +42,69 @@ export default function ApplePopover() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  const handleOpenAbout = () => {
+    if (!appOpen.includes("settings")) {
+      setAppOpen([...appOpen, "settings"]);
+    }
+    setActiveApp("settings");
+    setSettingsActiveTab("general");
+    setSettingsGeneralSubView("about");
+    setIsOpen(false);
+  };
+
+  const handleOpenSettings = () => {
+    if (!appOpen.includes("settings")) {
+      setAppOpen([...appOpen, "settings"]);
+    }
+    setActiveApp("settings");
+    setIsOpen(false);
+  };
+
+  const lockScreen = () => {
+    setCurrentWindow(CURRENT_WINDOW_TYPE.LOCKSCREEN);
+    setIsOpen(false);
+  };
+
+  const handleSleep = () => {
+    setCurrentWindow(CURRENT_WINDOW_TYPE.SLEEP);
+    setIsOpen(false);
+  };
+
+  const handleShutDown = () => {
+    setCurrentWindow(CURRENT_WINDOW_TYPE.SHUTDOWN);
+    setIsOpen(false);
+  };
+
   const menuGroups: MenuItem[][] = [
-    [{ label: "About This Mac", icon: Monitor }],
-    [{ label: "System Settings...", icon: Settings }],
+    [{ label: "About This Mac", icon: Monitor, onClick: handleOpenAbout }],
     [
-      { label: "Sleep", icon: Moon },
-      { label: "Restart...", icon: Play, rotateIcon: true },
-      { label: "Shut Down...", icon: Power },
+      {
+        label: "System Settings...",
+        icon: Settings,
+        onClick: handleOpenSettings,
+      },
     ],
     [
-      { label: "Lock Screen", icon: Lock },
-      { label: "Log Out sibghat khan...", icon: User },
+      { label: "Sleep", icon: Moon, onClick: handleSleep },
+      { label: "Restart...", icon: Play, onClick: handleShutDown },
+      { label: "Shut Down...", icon: Power, onClick: handleShutDown },
+    ],
+    [
+      {
+        label: "Lock Screen",
+        icon: Lock,
+        onClick: lockScreen,
+      },
+      // { label: "Log Out sibghat khan...", icon: User, onClick: () => console.log("Log Out clicked") },
     ],
   ];
 
   return (
     <div className="relative" ref={menuRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() =>
+          currentWindow !== CURRENT_WINDOW_TYPE.LOCKSCREEN && setIsOpen(!isOpen)
+        }
         className={`px-3 py-1 flex items-center justify-center rounded-full transition-colors ${
           isOpen ? "bg-white/20" : "hover:bg-white/10"
         }`}
@@ -69,14 +120,13 @@ export default function ApplePopover() {
                 {group.map((item, itemIndex) => (
                   <button
                     key={itemIndex}
+                    onClick={item.onClick}
                     className="w-full flex items-center justify-between px-2 py-1 rounded-md hover:bg-blue-500 hover:text-white group transition-none"
                   >
                     <div className="flex items-center gap-2.5">
                       <item.icon
                         size={14}
-                        className={`text-gray-400 group-hover:text-white ${
-                          item.rotateIcon ? "rotate-180" : ""
-                        }`}
+                        className={`text-gray-400 group-hover:text-white `}
                       />
                       <span>{item.label}</span>
                     </div>

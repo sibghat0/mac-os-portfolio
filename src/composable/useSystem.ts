@@ -17,6 +17,8 @@ export const systemStore = new Store({
   batteryLevel: 88,
   isCharging: false,
   wallpaper: getInitialWallpaper(),
+  settingsActiveTab: "wifi",
+  settingsGeneralSubView: "main" as "main" | "about",
 });
 
 export const useSystem = () => {
@@ -24,6 +26,14 @@ export const useSystem = () => {
   const batteryLevel = useSelector(systemStore, (state) => state.batteryLevel);
   const isCharging = useSelector(systemStore, (state) => state.isCharging);
   const wallpaper = useSelector(systemStore, (state) => state.wallpaper);
+  const settingsActiveTab = useSelector(
+    systemStore,
+    (state) => state.settingsActiveTab,
+  );
+  const settingsGeneralSubView = useSelector(
+    systemStore,
+    (state) => state.settingsGeneralSubView,
+  );
 
   const setWifiEnabled = (enabled: boolean) =>
     systemStore.setState((s) => ({ ...s, wifiEnabled: enabled }));
@@ -39,6 +49,11 @@ export const useSystem = () => {
     systemStore.setState((s) => ({ ...s, wallpaper: bg }));
   };
 
+  const setSettingsActiveTab = (tab: string) =>
+    systemStore.setState((s) => ({ ...s, settingsActiveTab: tab }));
+  const setSettingsGeneralSubView = (view: "main" | "about") =>
+    systemStore.setState((s) => ({ ...s, settingsGeneralSubView: view }));
+
   return {
     wifiEnabled,
     setWifiEnabled,
@@ -48,5 +63,9 @@ export const useSystem = () => {
     setIsCharging,
     wallpaper,
     setWallpaper,
+    settingsActiveTab,
+    setSettingsActiveTab,
+    settingsGeneralSubView,
+    setSettingsGeneralSubView,
   };
 };

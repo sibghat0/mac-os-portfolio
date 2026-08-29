@@ -87,11 +87,11 @@ export default function Settings() {
     setWifiEnabled,
     batteryLevel,
     isCharging,
+    settingsActiveTab: activeTab,
+    setSettingsActiveTab: setActiveTab,
+    settingsGeneralSubView: generalSubView,
+    setSettingsGeneralSubView: setGeneralSubView,
   } = useSystem();
-  const [activeTab, setActiveTab] = useState("wifi");
-  const [generalSubView, setGeneralSubView] = useState<"main" | "about">(
-    "main",
-  );
 
   const renderContent = () => {
     switch (activeTab) {

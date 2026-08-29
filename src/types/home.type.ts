@@ -1,6 +1,8 @@
 export const CURRENT_WINDOW_TYPE = {
   LOCKSCREEN: "lockscreen",
   HOME: "home",
+  SHUTDOWN: "shutdown",
+  SLEEP: "sleep",
 } as const;
 
 export type CURRENT_WINDOW_TYPE =

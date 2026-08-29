@@ -4,7 +4,10 @@ import { CURRENT_WINDOW_TYPE } from "../types/home.type";
 
 export default function LockScreen({ setCurrentWindow }: any) {
   return (
-    <div className="relative h-screen w-screen overflow-hidden">
+    <div
+      onClick={() => setCurrentWindow(CURRENT_WINDOW_TYPE.HOME)}
+      className="relative h-screen w-screen overflow-hidden"
+    >
       <img
         src={backgroundImage}
         alt="Background"
@@ -16,10 +19,7 @@ export default function LockScreen({ setCurrentWindow }: any) {
         <LockScreenClock />
       </div>
 
-      <div
-        onClick={() => setCurrentWindow(CURRENT_WINDOW_TYPE.HOME)}
-        className="absolute bottom-24 flex flex-col items-center justify-center gap-2 z-20 w-full cursor-pointer"
-      >
+      <div className="absolute bottom-24 flex flex-col items-center justify-center gap-2 z-20 w-full cursor-pointer">
         <div className="bg-white/45 backdrop-blur-sm rounded-full w-12 h-12 flex justify-center">
           <span className="self-center font-bold text-xl text-white">S</span>
         </div>
