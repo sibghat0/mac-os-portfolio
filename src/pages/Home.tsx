@@ -6,6 +6,7 @@ import Safari from "@/components/Safari/Safari";
 import Settings from "@/components/Settings/Settings";
 import Terminal from "@/components/Terminal/Terminal";
 import VisualCode from "@/components/VisualCode/VisualCode";
+import VoiceAssistant from "@/components/VoiceAssistant/VoiceAssistant";
 import Resume from "@/components/Resume/Resume";
 import { CURRENT_WINDOW_TYPE } from "@/types/home.type";
 import { useSystem } from "@/composable/useSystem";
@@ -41,11 +42,12 @@ export default function Home({ currentWindow }: any) {
             <Mail />
             <Settings />
             <Resume />
+            <VoiceAssistant />
           </div>
 
           {/* Desktop Icons - Kept at z-0 so windows can overlap them naturally */}
           <div
-            className="absolute top-12 right-6 w-20 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-white/10 p-2 rounded-md z-0 group"
+            className="absolute top-12 left-6 w-20 flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-white/10 p-2 rounded-md z-0 group"
             onClick={handleOpenResume}
           >
             <img

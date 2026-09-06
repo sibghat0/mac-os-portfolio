@@ -6,40 +6,9 @@ import {
   useTransform,
   MotionValue,
 } from "framer-motion";
-import finderIcon from "@/assets/images/docker/Finder.svg";
-import appIcon from "@/assets/images/docker/Apps.svg";
-import mailIcon from "@/assets/images/docker/Mail.svg";
-import mapIcon from "@/assets/images/docker/Maps.svg";
-import settingsIcon from "@/assets/images/docker/System.svg";
-import trashIcon from "@/assets/images/docker/Empty_Bin.svg";
-import safariIcon from "@/assets/images/docker/Safari.svg";
-import terminalIcon from "@/assets/images/docker/Terminal.svg";
-import codeIcon from "@/assets/images/docker/vs_code.svg";
-import NotesIcon from "@/assets/images/docker/Notes.svg";
+
 import { useDocker } from "@/composable/useDocker";
-
-interface AppItem {
-  id: number;
-  name: string;
-  icon: string;
-  uniqueId: string;
-}
-
-const apps: AppItem[] = [
-  { id: 1, uniqueId: "finder", name: "Finder", icon: finderIcon },
-  { id: 2, uniqueId: "launchpad", name: "Launchpad", icon: appIcon },
-  { id: 3, uniqueId: "maps", name: "Maps", icon: mapIcon },
-  { id: 4, uniqueId: "email", name: "Email", icon: mailIcon },
-  { id: 5, uniqueId: "terminal", name: "Terminal", icon: terminalIcon },
-  { id: 6, uniqueId: "safari", name: "Safari", icon: safariIcon },
-  { id: 7, uniqueId: "vscode", name: "VS Code", icon: codeIcon },
-  { id: 8, uniqueId: "notes", name: "Notes", icon: NotesIcon },
-];
-
-const systemApps: AppItem[] = [
-  { id: 9, uniqueId: "settings", name: "Settings", icon: settingsIcon },
-  { id: 10, uniqueId: "trash", name: "Trash", icon: trashIcon },
-];
+import { apps, type AppItem } from "@/utils/constant";
 
 const BASE = 56;
 const PEAK = 100;
@@ -141,7 +110,7 @@ export default function Footer() {
   const [loadedImages, setLoadedImages] = useState(0);
   const { appMaximized } = useDocker();
 
-  const totalImages = apps.length + systemApps.length;
+  const totalImages = apps.length;
   const isLoaded = loadedImages >= totalImages;
   const isAnyMaximized = appMaximized.length > 0;
 
@@ -163,17 +132,6 @@ export default function Footer() {
         className="flex items-end gap-2 h-20 box-border rounded-full border border-white/20 bg-white/10 px-3 py-2 shadow-[0_8px_40px_rgba(0,0,0,0.35)] backdrop-blur-[24px]"
       >
         {apps.map((app) => (
-          <DockItem
-            key={app.id}
-            app={app}
-            mouseX={mouseX}
-            onImageReady={handleImageReady}
-          />
-        ))}
-
-        <div className="w-0.5 h-12 bg-white/20 mx-1" />
-
-        {systemApps.map((app) => (
           <DockItem
             key={app.id}
             app={app}
