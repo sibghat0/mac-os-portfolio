@@ -152,7 +152,7 @@ export default function VoiceAssistant() {
               : status === "listening"
                 ? "bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 animate-pulse shadow-[0_0_50px_rgba(236,72,153,0.6)]"
                 : status === "processing"
-                  ? "bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 animate-spin"
+                  ? "bg-gradient-to-tr from-blue-500 via-purple-500 to-pink-500 animate-bounce"
                   : status === "executing"
                     ? "bg-green-500 shadow-[0_0_50px_rgba(34,197,94,0.8)]"
                     : "bg-gradient-to-tr from-blue-400 to-cyan-400 shadow-[0_0_60px_rgba(56,189,248,0.8)]"
