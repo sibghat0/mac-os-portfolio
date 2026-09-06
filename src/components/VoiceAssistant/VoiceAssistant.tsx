@@ -16,7 +16,9 @@ export default function VoiceAssistant() {
 
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<any>(null);
+  const commandRecognitionRef = useRef<any>(null);
   const isProcessingRef = useRef<boolean>(false);
+  const skipSendRef = useRef<boolean>(false);
 
   const { appOpen, setAppOpen, setActiveApp } = useDocker();
 
@@ -62,14 +64,28 @@ export default function VoiceAssistant() {
 
   const startRecordingCommand = async () => {
     setStatus("listening");
+    skipSendRef.current = false;
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       const audioChunks: BlobPart[] = [];
 
+      const stopEverything = () => {
+        commandRecognitionRef.current?.stop();
+        commandRecognitionRef.current = null;
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
       mediaRecorder.ondataavailable = (e) => audioChunks.push(e.data);
 
       mediaRecorder.onstop = () => {
+        stopEverything();
+
+        if (skipSendRef.current) {
+          return;
+        }
+
         const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
         setStatus("processing");
         chatMutation.mutate(audioBlob);
@@ -77,9 +93,41 @@ export default function VoiceAssistant() {
 
       mediaRecorder.start();
 
+      const SpeechRecognition =
+        (window as any).SpeechRecognition ||
+        (window as any).webkitSpeechRecognition;
+
+      if (SpeechRecognition) {
+        const commandRecognition = new SpeechRecognition();
+        commandRecognition.continuous = true;
+        commandRecognitionRef.current = commandRecognition;
+
+        commandRecognition.onresult = (event: any) => {
+          const transcript = event.results[
+            event.results.length - 1
+          ][0].transcript
+            .trim()
+            .toLowerCase();
+
+          if (handleLocalCommand(transcript)) {
+            skipSendRef.current = true;
+            if (mediaRecorder.state !== "inactive") {
+              mediaRecorder.stop();
+            }
+          }
+        };
+        // commented out because it was causing issues in some browsers and it is for debugging
+        // commandRecognition.onerror = () => {};
+
+        try {
+          commandRecognition.start();
+        } catch {}
+      }
+
       setTimeout(() => {
-        mediaRecorder.stop();
-        stream.getTracks().forEach((track) => track.stop());
+        if (mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+        }
       }, 6000);
     } catch (error) {
       console.error("Microphone access denied:", error);
@@ -109,6 +157,12 @@ export default function VoiceAssistant() {
       if (transcript.includes("hey pixie") && !isProcessingRef.current) {
         isProcessingRef.current = true;
         recognition.stop();
+
+        const remainder = transcript.split("hey pixie")[1]?.trim();
+        if (remainder && handleLocalCommand(remainder)) {
+          return;
+        }
+
         startRecordingCommand();
       } else if (!isProcessingRef.current) {
         const isHandledLocally = handleLocalCommand(transcript);
@@ -131,6 +185,8 @@ export default function VoiceAssistant() {
 
   const resetAssistant = () => {
     isProcessingRef.current = false;
+    commandRecognitionRef.current?.stop();
+    commandRecognitionRef.current = null;
     setStatus("idle");
     recognitionRef.current?.start();
   };
@@ -138,8 +194,10 @@ export default function VoiceAssistant() {
   useEffect(() => {
     return () => {
       recognitionRef.current?.stop();
+      commandRecognitionRef.current?.stop();
     };
   }, []);
+
   return (
     <div className=" absolute top-0 right-0 z-40 transform flex flex-col items-center justify-center p-6 gap-6">
       <div
