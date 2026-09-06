@@ -106,7 +106,7 @@ export default function VoiceAssistant() {
         .toLowerCase();
       console.log("🗣️ Heard:", transcript);
 
-      if (transcript.includes("hey ai") && !isProcessingRef.current) {
+      if (transcript.includes("hey pixie") && !isProcessingRef.current) {
         isProcessingRef.current = true;
         recognition.stop();
         startRecordingCommand();
@@ -160,7 +160,7 @@ export default function VoiceAssistant() {
       >
         <span className="text-white font-medium text-[10px]">
           {status === "sleeping" && "Click to Start"}
-          {status === "idle" && "Say 'Hey AI'"}
+          {status === "idle" && "Say 'Hey Pixie'"}
           {status === "listening" && "Listening..."}
           {status === "processing" && "Thinking..."}
           {status === "executing" && "Opening App..."}
