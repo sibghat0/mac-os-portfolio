@@ -15,7 +15,6 @@ import WindowWrapper from "@/components/WindowWrapper/WindowWrapper";
 import { useSystem } from "@/composable/useSystem";
 import w1 from "@/assets/images/wallpaper/w1.jpg";
 import w2 from "@/assets/images/wallpaper/w2.png";
-import w3 from "@/assets/images/wallpaper/w3.jpg";
 import w4 from "@/assets/images/wallpaper/w4.png";
 import w5 from "@/assets/images/wallpaper/w5.jpg";
 import w6 from "@/assets/images/wallpaper/w6.jpg";
@@ -53,11 +52,6 @@ const WALLPAPERS = [
     id: "monterey",
     name: "Monterey SVG",
     url: w2,
-  },
-  {
-    id: "ventura",
-    name: "Ventura SVG",
-    url: w3,
   },
   {
     id: "sonoma",
